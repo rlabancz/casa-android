@@ -38,6 +38,27 @@ public class MainActivity extends Activity implements LocationListener {
 
 	Drawable backgroundD;
 
+	// ListingStartDate
+	// PriceMax
+	//PriceMin 
+	//MinBath
+	// MaxBath
+	//MinBed
+	// MaxBed
+	// StoriesTotalMin
+	// StoriesTotalMax
+	/*
+	 * 
+	 "<OrderBy>1</OrderBy>"
+						+ "<OrderDirection>A</OrderDirection>" + "<Culture>en-CA</Culture>" + "<LatitudeMax>"
+
+						+ "<LeaseRentMax>0</LeaseRentMax>"
+						+ "<LeaseRentMin>0</LeaseRentMin>"
+	*/
+	
+	
+	
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);

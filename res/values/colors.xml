@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources>
+
+    <color name="text_colour">#FFFFFF</color>
+    <color name="list_item">#FFFFFF</color>
+    <color name="divider">#aa333333</color>
+    <color name="hidden">#000000</color>
+    <color name="transparent">#00000000 </color>
+    <color name="black">#000000</color>
+    <color name="red">#CC0000</color>
+    <color name="orange">#FF8800</color>
+    <color name="yellow">#FFF200</color>
+    <color name="green">#99CC00</color>
+    <color name="blue">#0099CC</color>
+    <color name="grey">#777777</color>
+    <color name="white">#ffffff</color>
+
+    <drawable name="ab_bg_black">#aa000000</drawable>
+
+</resources>

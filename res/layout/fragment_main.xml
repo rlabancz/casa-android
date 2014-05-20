@@ -1,26 +1,347 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/background"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="ca.rldesigns.android.casa.MainActivity$PlaceholderFragment" >
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent" >
 
-    <TextView
-        android:id="@+id/textview1"
-        android:layout_width="wrap_content"
+    <RelativeLayout
+        android:id="@+id/background"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="TextView" />
+        android:background="#000"
+        android:paddingBottom="@dimen/activity_vertical_margin"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:paddingTop="@dimen/activity_vertical_margin"
+        tools:context="ca.rldesigns.android.casa.MainActivity$PlaceholderFragment" >
 
-    <ImageView
-        android:id="@+id/imageView1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/textview1"
-        android:layout_below="@+id/textview1"
-        android:layout_marginTop="43dp" />
+        <TextView
+            android:id="@+id/textview1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/app_name" />
 
-</RelativeLayout>
+        <ImageView
+            android:id="@+id/imageView1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/textview1"
+            android:layout_below="@+id/textview1"
+            android:layout_marginTop="43dp"
+            android:contentDescription="@string/default_value"
+            android:visibility="gone" />
+
+        <DatePicker
+            android:id="@+id/date_picker"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/imageView1"
+            android:layout_below="@+id/textview1"
+            android:layout_marginTop="14dp"
+            android:calendarViewShown="false"
+            android:startYear="2014" />
+
+        <!-- price -->
+
+        <RelativeLayout
+            android:id="@+id/price"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/date_picker" >
+
+            <TextView
+                android:id="@+id/price_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="@string/price"
+                android:textSize="22sp" />
+
+            <com.edmodo.rangebar.RangeBar
+                xmlns:custom="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/price_range"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/price_title"
+                android:layout_marginTop="4dp"
+                custom:tickCount="10" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/price_range"
+                android:baselineAligned="false"
+                android:orientation="horizontal" >
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical" >
+
+                    <TextView
+                        style="@style/RoboTheme"
+                        android:layout_marginTop="0dp"
+                        android:labelFor="@+id/price_min"
+                        android:text="@string/min" />
+
+                    <EditText
+                        android:id="@+id/price_min"
+                        style="@style/RoboTheme"
+                        android:layout_marginTop="0dp"
+                        android:inputType="number"
+                        android:text="@string/default_value"
+                        android:textSize="18sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical" >
+
+                    <TextView
+                        style="@style/RoboTheme"
+                        android:layout_marginTop="0dp"
+                        android:labelFor="@+id/price_max"
+                        android:text="@string/max" />
+
+                    <EditText
+                        android:id="@+id/price_max"
+                        style="@style/RoboTheme"
+                        android:layout_marginTop="0dp"
+                        android:inputType="number"
+                        android:text="@string/default_value"
+                        android:textSize="18sp" />
+                </LinearLayout>
+            </LinearLayout>
+        </RelativeLayout>
+
+        <!-- bedroom -->
+
+        <RelativeLayout
+            android:id="@+id/bedroom"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/price" >
+
+            <TextView
+                android:id="@+id/bedroom_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="@string/bedroom"
+                android:textSize="22sp" />
+
+            <com.edmodo.rangebar.RangeBar
+                xmlns:custom="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/bedroom_range"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/bedroom_title"
+                android:layout_marginTop="4dp"
+                custom:tickCount="5" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/bedroom_range"
+                android:baselineAligned="false"
+                android:orientation="horizontal" >
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical" >
+
+                    <TextView
+                        style="@style/RoboTheme"
+                        android:layout_marginTop="0dp"
+                        android:labelFor="@+id/bedroom_min"
+                        android:text="@string/min" />
+
+                    <EditText
+                        android:id="@+id/bedroom_min"
+                        style="@style/RoboTheme"
+                        android:layout_marginTop="0dp"
+                        android:inputType="number"
+                        android:text="@string/default_value"
+                        android:textSize="24sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical" >
+
+                    <TextView
+                        style="@style/RoboTheme"
+                        android:layout_marginTop="0dp"
+                        android:labelFor="@+id/bedroom_max"
+                        android:text="@string/max" />
+
+                    <EditText
+                        android:id="@+id/bedroom_max"
+                        style="@style/RoboTheme"
+                        android:layout_marginTop="0dp"
+                        android:inputType="number"
+                        android:text="@string/default_value"
+                        android:textSize="24sp" />
+                </LinearLayout>
+            </LinearLayout>
+        </RelativeLayout>
+        <!-- Bathroom -->
+
+        <RelativeLayout
+            android:id="@+id/bathroom"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/bedroom" >
+
+            <TextView
+                android:id="@+id/bathroom_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="@string/bathroom"
+                android:textSize="22sp" />
+
+            <com.edmodo.rangebar.RangeBar
+                xmlns:custom="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/bathroom_range"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/bathroom_title"
+                android:layout_marginTop="4dp"
+                custom:tickCount="5" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/bathroom_range"
+                android:baselineAligned="false"
+                android:orientation="horizontal" >
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical" >
+
+                    <TextView
+                        style="@style/RoboTheme"
+                        android:layout_marginTop="0dp"
+                        android:labelFor="@+id/bathroom_min"
+                        android:text="@string/min" />
+
+                    <EditText
+                        android:id="@+id/bathroom_min"
+                        style="@style/RoboTheme"
+                        android:layout_marginTop="0dp"
+                        android:inputType="number"
+                        android:text="@string/default_value"
+                        android:textSize="24sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical" >
+
+                    <TextView
+                        style="@style/RoboTheme"
+                        android:layout_marginTop="0dp"
+                        android:labelFor="@+id/bathroom_max"
+                        android:text="@string/max" />
+
+                    <EditText
+                        android:id="@+id/bathroom_max"
+                        style="@style/RoboTheme"
+                        android:layout_marginTop="0dp"
+                        android:inputType="number"
+                        android:text="@string/default_value"
+                        android:textSize="24sp" />
+                </LinearLayout>
+            </LinearLayout>
+        </RelativeLayout>
+
+        <!-- stories -->
+
+        <RelativeLayout
+            android:id="@+id/stories"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/bathroom" >
+
+            <TextView
+                android:id="@+id/stories_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="@string/stories"
+                android:textSize="22sp" />
+
+            <com.edmodo.rangebar.RangeBar
+                xmlns:custom="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/stories_range"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/stories_title"
+                android:layout_marginTop="4dp"
+                custom:tickCount="5" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/stories_range"
+                android:baselineAligned="false"
+                android:orientation="horizontal" >
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical" >
+
+                    <TextView
+                        style="@style/RoboTheme"
+                        android:layout_marginTop="0dp"
+                        android:labelFor="@+id/stories_min"
+                        android:text="@string/min" />
+
+                    <EditText
+                        android:id="@+id/stories_min"
+                        style="@style/RoboTheme"
+                        android:layout_marginTop="0dp"
+                        android:inputType="number"
+                        android:text="@string/default_value"
+                        android:textSize="24sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical" >
+
+                    <TextView
+                        style="@style/RoboTheme"
+                        android:layout_marginTop="0dp"
+                        android:labelFor="@+id/stories_max"
+                        android:text="@string/max" />
+
+                    <EditText
+                        android:id="@+id/stories_max"
+                        style="@style/RoboTheme"
+                        android:layout_marginTop="0dp"
+                        android:inputType="number"
+                        android:text="@string/default_value"
+                        android:textSize="24sp" />
+                </LinearLayout>
+            </LinearLayout>
+        </RelativeLayout>
+    </RelativeLayout>
+
+</ScrollView>
