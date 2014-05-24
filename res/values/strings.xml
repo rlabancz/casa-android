@@ -14,6 +14,7 @@
     <string name="price">Price</string>
     <string name="stories">Stories</string>
     <!-- menu -->
+    <string name="action_export">Export to Glass</string>
     <string name="action_load">Load</string>
     <string name="action_reset">Reset</string>
     <string name="action_save">Save</string>

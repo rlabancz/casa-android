@@ -70,7 +70,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/price_title"
                 android:layout_marginTop="4dp"
-                custom:tickCount="10" />
+                custom:tickCount="11" />
 
             <LinearLayout
                 android:layout_width="match_parent"

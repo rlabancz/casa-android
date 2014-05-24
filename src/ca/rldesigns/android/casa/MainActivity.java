@@ -12,6 +12,7 @@ import com.edmodo.rangebar.RangeBar;
 import com.edmodo.rangebar.RangeBar.OnRangeBarChangeListener;
 
 import ca.rldesigns.android.casa.utils.ActionParams;
+import ca.rldesigns.android.casa.utils.Formatter;
 import ca.rldesigns.android.casa.utils.RequestCodes;
 import ca.rldesigns.android.casa.utils.ResultCodes;
 
@@ -106,10 +107,10 @@ public class MainActivity extends Activity implements OnKeyListener, OnRangeBarC
 		priceRange.setThumbIndices(priceMinValue, priceMaxValue);
 		priceRange.setOnRangeBarChangeListener(this);
 		priceMin = (EditText) findViewById(R.id.price_min);
-		priceMin.setText(Integer.toString(priceRange.getLeftIndex()));
+		priceMin.setText(Formatter.formatDecimal(priceRange.getLeftIndex() * 500000));
 		priceMin.setOnKeyListener(this);
 		priceMax = (EditText) findViewById(R.id.price_max);
-		priceMax.setText(Integer.toString(priceRange.getRightIndex()));
+		priceMax.setText(Formatter.formatDecimal(priceRange.getRightIndex() * 500000));
 		priceMax.setOnKeyListener(this);
 		// Bedroom
 		bedroomRange = (RangeBar) findViewById(R.id.bedroom_range);
@@ -193,14 +194,14 @@ public class MainActivity extends Activity implements OnKeyListener, OnRangeBarC
 		editor.putInt(ApplicationData.START_DATE_YEAR, datePicker.getYear());
 		editor.putInt(ApplicationData.START_DATE_MONTH, datePicker.getMonth());
 		editor.putInt(ApplicationData.START_DATE_DAY, datePicker.getDayOfMonth());
-		editor.putInt(ApplicationData.PRICE_MIN, priceMinValue);
-		editor.putInt(ApplicationData.PRICE_MAX, priceMaxValue);
-		editor.putInt(ApplicationData.BEDROOM_MIN, bedroomMinValue);
-		editor.putInt(ApplicationData.BEDROOM_MAX, bedroomMaxValue);
-		editor.putInt(ApplicationData.BATHROOM_MIN, bathroomMinValue);
-		editor.putInt(ApplicationData.BATHROOM_MAX, bathroomMaxValue);
-		editor.putInt(ApplicationData.STORIES_MIN, storiesMinValue);
-		editor.putInt(ApplicationData.STORIES_MAX, storiesMaxValue);
+		editor.putInt(ApplicationData.PRICE_MIN, priceRange.getLeftIndex());
+		editor.putInt(ApplicationData.PRICE_MAX, priceRange.getRightIndex());
+		editor.putInt(ApplicationData.BEDROOM_MIN, bedroomRange.getLeftIndex());
+		editor.putInt(ApplicationData.BEDROOM_MAX, bedroomRange.getRightIndex());
+		editor.putInt(ApplicationData.BATHROOM_MIN, bathroomRange.getLeftIndex());
+		editor.putInt(ApplicationData.BATHROOM_MAX, bathroomRange.getRightIndex());
+		editor.putInt(ApplicationData.STORIES_MIN, storiesRange.getLeftIndex());
+		editor.putInt(ApplicationData.STORIES_MAX, storiesRange.getRightIndex());
 
 		editor.commit();
 	}
@@ -214,9 +215,9 @@ public class MainActivity extends Activity implements OnKeyListener, OnRangeBarC
 		switch (rangeBar.getId()) {
 		case R.id.price_range:
 			priceMinValue = rangeBar.getLeftIndex();
-			priceMin.setText(Integer.toString(priceMinValue));
+			priceMin.setText(Formatter.formatDecimal(priceMinValue * 500000));
 			priceMaxValue = rangeBar.getRightIndex();
-			priceMax.setText(Integer.toString(priceMaxValue));
+			priceMax.setText(Formatter.formatDecimal(priceMaxValue * 500000));
 			break;
 
 		case R.id.bedroom_range:
@@ -253,8 +254,8 @@ public class MainActivity extends Activity implements OnKeyListener, OnRangeBarC
 		view.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
 		switch (view.getId()) {
 		case R.id.set_location:
-			Intent intentNewGame = new Intent(this, MapPopupActivity.class);
-			startActivityForResult(intentNewGame, RequestCodes.REQUEST_MAP);
+			Intent intentSetLocation = new Intent(this, MapPopupActivity.class);
+			startActivityForResult(intentSetLocation, RequestCodes.REQUEST_MAP);
 			break;
 		}
 	}
