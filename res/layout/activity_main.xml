@@ -34,7 +34,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignLeft="@+id/location"
-            android:layout_below="@+id/textview1"
+            android:layout_below="@+id/location"
             android:layout_marginTop="43dp"
             android:contentDescription="@string/default_value"
             android:visibility="gone" />
@@ -45,8 +45,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/location"
             android:layout_marginTop="14dp"
-            android:calendarViewShown="false"
-            android:startYear="2014" />
+            android:calendarViewShown="false" />
 
         <!-- price -->
 
@@ -298,7 +297,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/stories_title"
                 android:layout_marginTop="4dp"
-                custom:tickCount="5" />
+                custom:tickCount="4" />
 
             <LinearLayout
                 android:layout_width="match_parent"

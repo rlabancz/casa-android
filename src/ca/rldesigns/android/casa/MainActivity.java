@@ -6,6 +6,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.Calendar;
+
+import com.edmodo.rangebar.RangeBar;
+import com.edmodo.rangebar.RangeBar.OnRangeBarChangeListener;
 
 import ca.rldesigns.android.casa.utils.ActionParams;
 import ca.rldesigns.android.casa.utils.RequestCodes;
@@ -16,20 +20,23 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.HapticFeedbackConstants;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnKeyListener;
 import android.widget.Button;
+import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-public class MainActivity extends Activity implements OnClickListener {
+public class MainActivity extends Activity implements OnKeyListener, OnRangeBarChangeListener, OnClickListener {
 
 	private SharedPreferences savedSettings;
 
@@ -37,23 +44,42 @@ public class MainActivity extends Activity implements OnClickListener {
 	private TextView location;
 	private ImageView imageView1;
 
-	Drawable backgroundD;
+	private DatePicker datePicker;
+	private int year;
+	private int monthOfYear;
+	private int dayOfMonth;
+
+	// Price
+	private RangeBar priceRange;
+	private EditText priceMin;
+	private int priceMinValue;
+	private EditText priceMax;
+	private int priceMaxValue;
+
+	// Bedroom
+	private RangeBar bedroomRange;
+	private EditText bedroomMin;
+	private int bedroomMinValue;
+	private EditText bedroomMax;
+	private int bedroomMaxValue;
+
+	// Bathroom
+	private RangeBar bathroomRange;
+	private EditText bathroomMin;
+	private int bathroomMinValue;
+	private EditText bathroomMax;
+	private int bathroomMaxValue;
+
+	// Bathroom
+	private RangeBar storiesRange;
+	private EditText storiesMin;
+	private int storiesMinValue;
+	private EditText storiesMax;
+	private int storiesMaxValue;
 
 	// ListingStartDate
-	// PriceMax
-	// PriceMin
-	// MinBath
-	// MaxBath
-	// MinBed
-	// MaxBed
-	// StoriesTotalMin
-	// StoriesTotalMax
-	/*
-	 * 
-	 * "<OrderBy>1</OrderBy>" + "<OrderDirection>A</OrderDirection>" + "<Culture>en-CA</Culture>" + "<LatitudeMax>"
-	 * 
-	 * + "<LeaseRentMax>0</LeaseRentMax>" + "<LeaseRentMin>0</LeaseRentMin>"
-	 */
+	// LeaseRentMin
+	// LeaseRentMax
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -63,8 +89,52 @@ public class MainActivity extends Activity implements OnClickListener {
 
 		setLocation = (Button) findViewById(R.id.set_location);
 		setLocation.setOnClickListener(this);
-
 		location = (TextView) findViewById(R.id.location);
+
+		datePicker = (DatePicker) findViewById(R.id.date_picker);
+		Calendar cal = Calendar.getInstance();
+		long oneYear = (long) 3.154E10;
+		datePicker.setMaxDate(cal.getTimeInMillis());
+		datePicker.setMinDate(cal.getTimeInMillis() - oneYear);
+
+		loadSettings();
+
+		datePicker.updateDate(year, monthOfYear, dayOfMonth);
+
+		// Price
+		priceRange = (RangeBar) findViewById(R.id.price_range);
+		priceRange.setThumbIndices(priceMinValue, priceMaxValue);
+		priceRange.setOnRangeBarChangeListener(this);
+		priceMin = (EditText) findViewById(R.id.price_min);
+		priceMin.setText(Integer.toString(priceRange.getLeftIndex()));
+		priceMin.setOnKeyListener(this);
+		priceMax = (EditText) findViewById(R.id.price_max);
+		priceMax.setText(Integer.toString(priceRange.getRightIndex()));
+		priceMax.setOnKeyListener(this);
+		// Bedroom
+		bedroomRange = (RangeBar) findViewById(R.id.bedroom_range);
+		bedroomRange.setThumbIndices(bedroomMinValue, bedroomMaxValue);
+		bedroomRange.setOnRangeBarChangeListener(this);
+		bedroomMin = (EditText) findViewById(R.id.bedroom_min);
+		bedroomMin.setText(Integer.toString(bedroomRange.getLeftIndex()));
+		bedroomMax = (EditText) findViewById(R.id.bedroom_max);
+		bedroomMax.setText(Integer.toString(bedroomRange.getLeftIndex()));
+		// Bathroom
+		bathroomRange = (RangeBar) findViewById(R.id.bathroom_range);
+		bathroomRange.setThumbIndices(bathroomMinValue, bathroomMaxValue);
+		bathroomRange.setOnRangeBarChangeListener(this);
+		bathroomMin = (EditText) findViewById(R.id.bathroom_min);
+		bathroomMin.setText(Integer.toString(bathroomRange.getLeftIndex()));
+		bathroomMax = (EditText) findViewById(R.id.bathroom_max);
+		bathroomMax.setText(Integer.toString(bathroomRange.getLeftIndex()));
+		// Bathroom
+		storiesRange = (RangeBar) findViewById(R.id.stories_range);
+		storiesRange.setThumbIndices(storiesMinValue, storiesMaxValue);
+		storiesRange.setOnRangeBarChangeListener(this);
+		storiesMin = (EditText) findViewById(R.id.stories_min);
+		storiesMin.setText(Integer.toString(storiesRange.getLeftIndex()));
+		storiesMax = (EditText) findViewById(R.id.stories_max);
+		storiesMax.setText(Integer.toString(storiesRange.getLeftIndex()));
 
 		imageView1 = (ImageView) findViewById(R.id.imageView1);
 		String URL = "http://cdn.realtor.ca/listing/reb82/highres/3/c2855403_5.jpg";
@@ -101,15 +171,37 @@ public class MainActivity extends Activity implements OnClickListener {
 	}
 
 	private void loadSettings() {
-
 		String selectedAddress = savedSettings.getString(ApplicationData.SELECTED_ADDRESS, "");
 		ActionParams.SELECTED_ADDRESS = selectedAddress;
 		location.setText(selectedAddress);
+		year = savedSettings.getInt(ApplicationData.START_DATE_YEAR, datePicker.getYear());
+		monthOfYear = savedSettings.getInt(ApplicationData.START_DATE_MONTH, datePicker.getMonth());
+		dayOfMonth = savedSettings.getInt(ApplicationData.START_DATE_DAY, datePicker.getDayOfMonth());
+		priceMinValue = savedSettings.getInt(ApplicationData.PRICE_MIN, 0);
+		priceMaxValue = savedSettings.getInt(ApplicationData.PRICE_MAX, 0);
+		bedroomMinValue = savedSettings.getInt(ApplicationData.BEDROOM_MIN, 0);
+		bedroomMaxValue = savedSettings.getInt(ApplicationData.BEDROOM_MAX, 0);
+		bathroomMinValue = savedSettings.getInt(ApplicationData.BATHROOM_MIN, 0);
+		bathroomMaxValue = savedSettings.getInt(ApplicationData.BATHROOM_MAX, 0);
+		storiesMinValue = savedSettings.getInt(ApplicationData.STORIES_MIN, 0);
+		storiesMaxValue = savedSettings.getInt(ApplicationData.STORIES_MAX, 0);
 	}
 
 	private void saveSettings() {
 		SharedPreferences.Editor editor = savedSettings.edit();
 		editor.putString(ApplicationData.SELECTED_ADDRESS, ActionParams.SELECTED_ADDRESS);
+		editor.putInt(ApplicationData.START_DATE_YEAR, datePicker.getYear());
+		editor.putInt(ApplicationData.START_DATE_MONTH, datePicker.getMonth());
+		editor.putInt(ApplicationData.START_DATE_DAY, datePicker.getDayOfMonth());
+		editor.putInt(ApplicationData.PRICE_MIN, priceMinValue);
+		editor.putInt(ApplicationData.PRICE_MAX, priceMaxValue);
+		editor.putInt(ApplicationData.BEDROOM_MIN, bedroomMinValue);
+		editor.putInt(ApplicationData.BEDROOM_MAX, bedroomMaxValue);
+		editor.putInt(ApplicationData.BATHROOM_MIN, bathroomMinValue);
+		editor.putInt(ApplicationData.BATHROOM_MAX, bathroomMaxValue);
+		editor.putInt(ApplicationData.STORIES_MIN, storiesMinValue);
+		editor.putInt(ApplicationData.STORIES_MAX, storiesMaxValue);
+
 		editor.commit();
 	}
 
@@ -118,8 +210,46 @@ public class MainActivity extends Activity implements OnClickListener {
 	}
 
 	@Override
-	public void onClick(View view) {
+	public void onIndexChangeListener(RangeBar rangeBar, int leftThumbIndex, int rightThumbIndex) {
+		switch (rangeBar.getId()) {
+		case R.id.price_range:
+			priceMinValue = rangeBar.getLeftIndex();
+			priceMin.setText(Integer.toString(priceMinValue));
+			priceMaxValue = rangeBar.getRightIndex();
+			priceMax.setText(Integer.toString(priceMaxValue));
+			break;
+
+		case R.id.bedroom_range:
+			bedroomMinValue = rangeBar.getLeftIndex();
+			bedroomMin.setText(Integer.toString(rangeBar.getLeftIndex()));
+			bedroomMaxValue = rangeBar.getRightIndex();
+			bedroomMax.setText(Integer.toString(rangeBar.getRightIndex()));
+			break;
+
+		case R.id.bathroom_range:
+			bathroomMinValue = rangeBar.getLeftIndex();
+			bathroomMin.setText(Integer.toString(rangeBar.getLeftIndex()));
+			bathroomMaxValue = rangeBar.getRightIndex();
+			bathroomMax.setText(Integer.toString(rangeBar.getRightIndex()));
+			break;
+
+		case R.id.stories_range:
+			storiesMinValue = rangeBar.getLeftIndex();
+			storiesMin.setText(Integer.toString(rangeBar.getLeftIndex()));
+			storiesMaxValue = rangeBar.getLeftIndex();
+			storiesMax.setText(Integer.toString(rangeBar.getRightIndex()));
+			break;
+		}
+	}
+
+	@Override
+	public boolean onKey(View v, int keyCode, KeyEvent event) {
 		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public void onClick(View view) {
 		view.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
 		switch (view.getId()) {
 		case R.id.set_location:
@@ -175,4 +305,5 @@ public class MainActivity extends Activity implements OnClickListener {
 			// ---------------------------------------------------
 		}
 	}
+
 }
