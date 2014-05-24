@@ -1,4 +1,4 @@
-package ca.rldesigns.android.casa;
+package ca.rldesigns.android.casa.utils;
 
 /**
  * A utility class containing arithmetic and geometry helper methods.

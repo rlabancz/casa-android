@@ -3,9 +3,14 @@
     tools:context="ca.rldesigns.android.casa.MainActivity" >
 
     <item
-        android:id="@+id/action_settings"
+        android:id="@+id/action_load"
         android:orderInCategory="100"
         android:showAsAction="never"
-        android:title="@string/action_settings"/>
+        android:title="@string/action_load"/>
+    <item
+        android:id="@+id/action_save"
+        android:orderInCategory="200"
+        android:showAsAction="never"
+        android:title="@string/action_save"/>
 
 </menu>
