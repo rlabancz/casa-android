@@ -17,4 +17,7 @@
 
     <drawable name="ab_bg_black">#aa000000</drawable>
 
+    <color name="contents_text">#ff000000</color>
+    <color name="encode_view">#ffffffff</color>
+
 </resources>

@@ -8,8 +8,16 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.util.Calendar;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import com.edmodo.rangebar.RangeBar;
 import com.edmodo.rangebar.RangeBar.OnRangeBarChangeListener;
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.client.android.Contents;
+import com.google.zxing.client.android.EncodeActivity;
+import com.google.zxing.client.android.Intents;
 
 import ca.rldesigns.android.casa.utils.ActionParams;
 import ca.rldesigns.android.casa.utils.Formatter;
@@ -164,6 +172,9 @@ public class MainActivity extends Activity implements OnKeyListener, OnRangeBarC
 		} else if (id == R.id.action_save) {
 			saveSettings();
 			return true;
+		} else if (id == R.id.action_export) {
+			exportSettings();
+			return true;
 		} else if (id == R.id.action_reset) {
 			clearSettings();
 			return true;
@@ -204,6 +215,63 @@ public class MainActivity extends Activity implements OnKeyListener, OnRangeBarC
 		editor.putInt(ApplicationData.STORIES_MAX, storiesRange.getRightIndex());
 
 		editor.commit();
+	}
+
+	private void exportSettings() {
+		JSONObject sd = new JSONObject();
+		try {
+			sd.put("ymd",
+					Integer.toString(datePicker.getYear()) + Integer.toString(datePicker.getMonth()) + Integer.toString(datePicker.getDayOfMonth()));
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		JSONObject price = new JSONObject();
+		try {
+			price.put("min", priceRange.getLeftIndex());
+			price.put("max", priceRange.getRightIndex());
+
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		JSONArray jsonArray = new JSONArray();
+
+		jsonArray.put(sd);
+		jsonArray.put(price);
+
+		JSONObject settingsObj = new JSONObject();
+		try {
+			settingsObj.put("s", jsonArray);
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		String out = settingsObj.toString();
+		JSONObject settings = new JSONObject();
+		try {
+			settings.put("d",
+					Integer.toString(datePicker.getYear()) + Integer.toString(datePicker.getMonth()) + Integer.toString(datePicker.getDayOfMonth()));
+
+			settings.put("p-", priceRange.getLeftIndex());
+			settings.put("p+", priceRange.getRightIndex());
+			settings.put("e-", bedroomRange.getLeftIndex());
+			settings.put("e+", bedroomRange.getRightIndex());
+			settings.put("a-", bathroomRange.getLeftIndex());
+			settings.put("a+", bathroomRange.getRightIndex());
+			settings.put("s-", storiesRange.getLeftIndex());
+			settings.put("s+", storiesRange.getRightIndex());
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		out = settings.toString();
+		Intent intent = new Intent(Intents.Encode.ACTION);
+		intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
+		intent.putExtra(Intents.Encode.TYPE, Contents.Type.TEXT);
+		intent.putExtra(Intents.Encode.DATA, out);
+		intent.putExtra(Intents.Encode.FORMAT, BarcodeFormat.QR_CODE.toString());
+		startActivity(intent);
 	}
 
 	private void clearSettings() {
