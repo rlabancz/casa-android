@@ -14,6 +14,14 @@
     <string name="bathroom">Bathroom</string>
     <string name="price">Price</string>
     <string name="stories">Stories</string>
-    <string name="maps_api_key">AIzaSyCY5UXyZzYEzjG1ROv4n8h3WeS16lZ9bfk</string>
+    <!--  -->
+    <string name="maps_api_key">AIzaSyAM4_yvghm3dmTeStjPcI_oKupUEJiK14M</string>
+    <!-- map -->
+    <string name="discard">Discard</string>
+    <string name="drag">Drag</string>
+    <string name="locate_me">Locate Me</string>
+    <string name="move_pin">Move Pin</string>
+    <string name="no_maps">Google Maps V2 not available!</string>
+    <string name="use">Use</string>
 
 </resources>

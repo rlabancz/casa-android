@@ -6,59 +6,54 @@ import java.io.InputStream;
 import java.net.URL;
 import java.net.URLConnection;
 
+import ca.rldesigns.android.casa.utils.ActionParams;
+import ca.rldesigns.android.casa.utils.RequestCodes;
+import ca.rldesigns.android.casa.utils.ResultCodes;
+
 import android.app.Activity;
-import android.app.ActionBar;
 import android.app.Fragment;
-import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
-import android.location.Location;
-import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.HapticFeedbackConstants;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.os.Build;
 
-public class MainActivity extends Activity implements LocationListener {
+public class MainActivity extends Activity {
 
-	private TextView txtLat;
-	private ImageView imageView1;
-	private RelativeLayout background;
 	LocationManager locationManager;
 
 	Drawable backgroundD;
 
 	// ListingStartDate
 	// PriceMax
-	//PriceMin 
-	//MinBath
+	// PriceMin
+	// MinBath
 	// MaxBath
-	//MinBed
+	// MinBed
 	// MaxBed
 	// StoriesTotalMin
 	// StoriesTotalMax
 	/*
 	 * 
-	 "<OrderBy>1</OrderBy>"
-						+ "<OrderDirection>A</OrderDirection>" + "<Culture>en-CA</Culture>" + "<LatitudeMax>"
+	 * "<OrderBy>1</OrderBy>" + "<OrderDirection>A</OrderDirection>" + "<Culture>en-CA</Culture>" + "<LatitudeMax>"
+	 * 
+	 * + "<LeaseRentMax>0</LeaseRentMax>" + "<LeaseRentMin>0</LeaseRentMin>"
+	 */
 
-						+ "<LeaseRentMax>0</LeaseRentMax>"
-						+ "<LeaseRentMin>0</LeaseRentMin>"
-	*/
-	
-	
-	
-	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -67,9 +62,6 @@ public class MainActivity extends Activity implements LocationListener {
 		if (savedInstanceState == null) {
 			getFragmentManager().beginTransaction().add(R.id.container, new PlaceholderFragment()).commit();
 		}
-
-		locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-		locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, this);
 	}
 
 	@Override
@@ -127,49 +119,61 @@ public class MainActivity extends Activity implements LocationListener {
 		}
 	}
 
-	@Override
-	public void onLocationChanged(Location location) {
-
-		txtLat = (TextView) findViewById(R.id.textview1);
-		txtLat.setText("Latitude:" + location.getLatitude() + ", Longitude:" + location.getLongitude());
-
-		background = (RelativeLayout) findViewById(R.id.background);
-		imageView1 = (ImageView) findViewById(R.id.imageView1);
-		String URL = "http://cdn.realtor.ca/listing/reb82/highres/3/c2855403_5.jpg";
-		imageView1.setTag(URL);
-		new DownloadImagesTask().execute(imageView1);
-
-		new SendDataAsync().execute(this, location.getLatitude(), location.getLongitude(), 2);
-	}
-
-	@Override
-	public void onProviderDisabled(String provider) {
-		Log.d("Latitude", "disable");
-	}
-
-	@Override
-	public void onProviderEnabled(String provider) {
-		Log.d("Latitude", "enable");
-	}
-
-	@Override
-	public void onStatusChanged(String provider, int status, Bundle extras) {
-		Log.d("Latitude", "status");
-	}
-
 	/**
 	 * A placeholder fragment containing a simple view.
 	 */
-	public static class PlaceholderFragment extends Fragment {
+	public static class PlaceholderFragment extends Fragment implements OnClickListener {
+
+		private Button setLocation;
+
+		private TextView location;
+		private ImageView imageView1;
+		private RelativeLayout background;
 
 		public PlaceholderFragment() {
 		}
 
 		@Override
 		public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-			View rootView = inflater.inflate(R.layout.fragment_main, container, false);
-			return rootView;
+			View view = inflater.inflate(R.layout.fragment_main, container, false);
+			setLocation = (Button) view.findViewById(R.id.set_location);
+			setLocation.setOnClickListener(this);
+
+			location = (TextView) view.findViewById(R.id.location);
+
+			background = (RelativeLayout) view.findViewById(R.id.background);
+			imageView1 = (ImageView) view.findViewById(R.id.imageView1);
+			String URL = "http://cdn.realtor.ca/listing/reb82/highres/3/c2855403_5.jpg";
+			imageView1.setTag(URL);
+			// new DownloadImagesTask().execute(imageView1);
+
+			// new SendDataAsync().execute(this, location.getLatitude(), location.getLongitude(), 2);
+
+			return view;
+		}
+
+		@Override
+		public void onClick(View view) {
+			// TODO Auto-generated method stub
+			view.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
+			switch (view.getId()) {
+			case R.id.set_location:
+				Intent intentNewGame = new Intent(getActivity(), MapPopupActivity.class);
+				startActivityForResult(intentNewGame, RequestCodes.REQUEST_MAP);
+				break;
+			}
+		}
+
+		public void onActivityResult(int requestCode, int resultCode, Intent data) {
+			super.onActivityResult(requestCode, resultCode, data);
+
+			switch (requestCode) {
+			case RequestCodes.REQUEST_MAP:
+				if (resultCode == ResultCodes.NEW_ADDRESS) {
+					location.setText(ActionParams.SELECTED_ADDRESS);
+				}
+				break;
+			}
 		}
 	}
-
 }

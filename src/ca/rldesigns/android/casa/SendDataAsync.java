@@ -19,6 +19,8 @@ import org.apache.http.protocol.HttpContext;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import ca.rldesigns.android.casa.utils.ResultCodes;
+
 import android.os.AsyncTask;
 import android.util.Log;
 

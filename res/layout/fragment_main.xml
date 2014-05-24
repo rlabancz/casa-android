@@ -15,16 +15,25 @@
         tools:context="ca.rldesigns.android.casa.MainActivity$PlaceholderFragment" >
 
         <TextView
-            android:id="@+id/textview1"
+            android:id="@+id/location"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/app_name" />
+
+        <Button
+            android:id="@+id/set_location"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:layout_toRightOf="@+id/location"
+            android:text="Set Location" />
 
         <ImageView
             android:id="@+id/imageView1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignLeft="@+id/textview1"
+            android:layout_alignLeft="@+id/location"
             android:layout_below="@+id/textview1"
             android:layout_marginTop="43dp"
             android:contentDescription="@string/default_value"
@@ -34,8 +43,7 @@
             android:id="@+id/date_picker"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignLeft="@+id/imageView1"
-            android:layout_below="@+id/textview1"
+            android:layout_below="@+id/location"
             android:layout_marginTop="14dp"
             android:calendarViewShown="false"
             android:startYear="2014" />
