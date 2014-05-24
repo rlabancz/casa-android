@@ -1,5 +1,6 @@
 package ca.rldesigns.android.casa;
 
+import static ca.rldesigns.android.casa.ApplicationData.DATABASE_NAME;
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -12,6 +13,7 @@ import ca.rldesigns.android.casa.utils.ResultCodes;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
@@ -29,8 +31,9 @@ import android.widget.TextView;
 
 public class MainActivity extends Activity implements OnClickListener {
 
-	private Button setLocation;
+	private SharedPreferences savedSettings;
 
+	private Button setLocation;
 	private TextView location;
 	private ImageView imageView1;
 
@@ -56,6 +59,7 @@ public class MainActivity extends Activity implements OnClickListener {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+		savedSettings = getSharedPreferences(DATABASE_NAME, 0);
 
 		setLocation = (Button) findViewById(R.id.set_location);
 		setLocation.setOnClickListener(this);
@@ -84,11 +88,33 @@ public class MainActivity extends Activity implements OnClickListener {
 		// as you specify a parent activity in AndroidManifest.xml.
 		int id = item.getItemId();
 		if (id == R.id.action_load) {
+			loadSettings();
 			return true;
 		} else if (id == R.id.action_save) {
+			saveSettings();
+			return true;
+		} else if (id == R.id.action_reset) {
+			clearSettings();
 			return true;
 		}
 		return super.onOptionsItemSelected(item);
+	}
+
+	private void loadSettings() {
+
+		String selectedAddress = savedSettings.getString(ApplicationData.SELECTED_ADDRESS, "");
+		ActionParams.SELECTED_ADDRESS = selectedAddress;
+		location.setText(selectedAddress);
+	}
+
+	private void saveSettings() {
+		SharedPreferences.Editor editor = savedSettings.edit();
+		editor.putString(ApplicationData.SELECTED_ADDRESS, ActionParams.SELECTED_ADDRESS);
+		editor.commit();
+	}
+
+	private void clearSettings() {
+
 	}
 
 	@Override
