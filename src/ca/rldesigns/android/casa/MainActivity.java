@@ -8,15 +8,14 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.util.Calendar;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.edmodo.rangebar.RangeBar;
 import com.edmodo.rangebar.RangeBar.OnRangeBarChangeListener;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.client.android.Contents;
-import com.google.zxing.client.android.EncodeActivity;
 import com.google.zxing.client.android.Intents;
 
 import ca.rldesigns.android.casa.utils.ActionParams;
@@ -49,9 +48,11 @@ public class MainActivity extends Activity implements OnKeyListener, OnRangeBarC
 
 	private SharedPreferences savedSettings;
 
+	private ImageView imageView1;
+
 	private Button setLocation;
 	private TextView location;
-	private ImageView imageView1;
+	private LatLng selectedLatLng;
 
 	private DatePicker datePicker;
 	private int year;
@@ -183,9 +184,11 @@ public class MainActivity extends Activity implements OnKeyListener, OnRangeBarC
 	}
 
 	private void loadSettings() {
-		String selectedAddress = savedSettings.getString(ApplicationData.SELECTED_ADDRESS, "");
-		ActionParams.SELECTED_ADDRESS = selectedAddress;
-		location.setText(selectedAddress);
+		ActionParams.SELECTED_ADDRESS = savedSettings.getString(ApplicationData.SELECTED_ADDRESS, "");
+		location.setText(ActionParams.SELECTED_ADDRESS);
+		double lat = savedSettings.getFloat(ApplicationData.SELECTED_LAT, 0.0f);
+		double lng = savedSettings.getFloat(ApplicationData.SELECTED_LNG, 0.0f);
+		selectedLatLng = new LatLng(lat, lng);
 		year = savedSettings.getInt(ApplicationData.START_DATE_YEAR, datePicker.getYear());
 		monthOfYear = savedSettings.getInt(ApplicationData.START_DATE_MONTH, datePicker.getMonth());
 		dayOfMonth = savedSettings.getInt(ApplicationData.START_DATE_DAY, datePicker.getDayOfMonth());
@@ -201,6 +204,8 @@ public class MainActivity extends Activity implements OnKeyListener, OnRangeBarC
 
 	private void saveSettings() {
 		SharedPreferences.Editor editor = savedSettings.edit();
+		editor.putFloat(ApplicationData.SELECTED_LAT, (float) selectedLatLng.latitude);
+		editor.putFloat(ApplicationData.SELECTED_LNG, (float) selectedLatLng.longitude);
 		editor.putString(ApplicationData.SELECTED_ADDRESS, ActionParams.SELECTED_ADDRESS);
 		editor.putInt(ApplicationData.START_DATE_YEAR, datePicker.getYear());
 		editor.putInt(ApplicationData.START_DATE_MONTH, datePicker.getMonth());
@@ -213,43 +218,14 @@ public class MainActivity extends Activity implements OnKeyListener, OnRangeBarC
 		editor.putInt(ApplicationData.BATHROOM_MAX, bathroomRange.getRightIndex());
 		editor.putInt(ApplicationData.STORIES_MIN, storiesRange.getLeftIndex());
 		editor.putInt(ApplicationData.STORIES_MAX, storiesRange.getRightIndex());
-
 		editor.commit();
 	}
 
 	private void exportSettings() {
-		JSONObject sd = new JSONObject();
-		try {
-			sd.put("ymd",
-					Integer.toString(datePicker.getYear()) + Integer.toString(datePicker.getMonth()) + Integer.toString(datePicker.getDayOfMonth()));
-		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		JSONObject price = new JSONObject();
-		try {
-			price.put("min", priceRange.getLeftIndex());
-			price.put("max", priceRange.getRightIndex());
-
-		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		JSONArray jsonArray = new JSONArray();
-
-		jsonArray.put(sd);
-		jsonArray.put(price);
-
-		JSONObject settingsObj = new JSONObject();
-		try {
-			settingsObj.put("s", jsonArray);
-		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		String out = settingsObj.toString();
 		JSONObject settings = new JSONObject();
 		try {
+			settings.put("x", selectedLatLng.longitude);
+			settings.put("y", selectedLatLng.latitude);
 			settings.put("d",
 					Integer.toString(datePicker.getYear()) + Integer.toString(datePicker.getMonth()) + Integer.toString(datePicker.getDayOfMonth()));
 
@@ -262,10 +238,9 @@ public class MainActivity extends Activity implements OnKeyListener, OnRangeBarC
 			settings.put("s-", storiesRange.getLeftIndex());
 			settings.put("s+", storiesRange.getRightIndex());
 		} catch (JSONException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		out = settings.toString();
+		String out = settings.toString();
 		Intent intent = new Intent(Intents.Encode.ACTION);
 		intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
 		intent.putExtra(Intents.Encode.TYPE, Contents.Type.TEXT);
@@ -313,7 +288,6 @@ public class MainActivity extends Activity implements OnKeyListener, OnRangeBarC
 
 	@Override
 	public boolean onKey(View v, int keyCode, KeyEvent event) {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
@@ -335,6 +309,7 @@ public class MainActivity extends Activity implements OnKeyListener, OnRangeBarC
 		case RequestCodes.REQUEST_MAP:
 			if (resultCode == ResultCodes.NEW_ADDRESS) {
 				location.setText(ActionParams.SELECTED_ADDRESS);
+				selectedLatLng = ActionParams.SELECTED_POSITION;
 			}
 			break;
 		}
@@ -374,5 +349,4 @@ public class MainActivity extends Activity implements OnKeyListener, OnRangeBarC
 			// ---------------------------------------------------
 		}
 	}
-
 }
