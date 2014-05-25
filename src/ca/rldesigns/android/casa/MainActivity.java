@@ -204,8 +204,8 @@ public class MainActivity extends Activity implements OnKeyListener, OnRangeBarC
 
 	private void saveSettings() {
 		SharedPreferences.Editor editor = savedSettings.edit();
-		editor.putFloat(ApplicationData.SELECTED_LAT, (float) selectedLatLng.latitude);
-		editor.putFloat(ApplicationData.SELECTED_LNG, (float) selectedLatLng.longitude);
+		editor.putFloat(ApplicationData.SELECTED_LAT, Float.parseFloat(Formatter.formatCoordinate(selectedLatLng.latitude)));
+		editor.putFloat(ApplicationData.SELECTED_LNG, Float.parseFloat(Formatter.formatCoordinate(selectedLatLng.longitude)));
 		editor.putString(ApplicationData.SELECTED_ADDRESS, ActionParams.SELECTED_ADDRESS);
 		editor.putInt(ApplicationData.START_DATE_YEAR, datePicker.getYear());
 		editor.putInt(ApplicationData.START_DATE_MONTH, datePicker.getMonth());
@@ -224,8 +224,8 @@ public class MainActivity extends Activity implements OnKeyListener, OnRangeBarC
 	private void exportSettings() {
 		JSONObject settings = new JSONObject();
 		try {
-			settings.put("x", selectedLatLng.longitude);
-			settings.put("y", selectedLatLng.latitude);
+			settings.put("x", Formatter.formatCoordinate(selectedLatLng.longitude));
+			settings.put("y", Formatter.formatCoordinate(selectedLatLng.latitude));
 			settings.put("d",
 					Integer.toString(datePicker.getYear()) + Integer.toString(datePicker.getMonth()) + Integer.toString(datePicker.getDayOfMonth()));
 
