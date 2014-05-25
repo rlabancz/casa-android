@@ -226,9 +226,10 @@ public class MainActivity extends Activity implements OnKeyListener, OnRangeBarC
 		try {
 			settings.put("x", Formatter.formatCoordinate(selectedLatLng.longitude));
 			settings.put("y", Formatter.formatCoordinate(selectedLatLng.latitude));
-			settings.put("d",
-					Integer.toString(datePicker.getYear()) + Integer.toString(datePicker.getMonth()) + Integer.toString(datePicker.getDayOfMonth()));
-
+			settings.put(
+					"d",
+					Integer.toString(datePicker.getMonth()) + "." + Integer.toString(datePicker.getDayOfMonth()) + "."
+							+ Integer.toString(datePicker.getYear()));
 			settings.put("p-", priceRange.getLeftIndex());
 			settings.put("p+", priceRange.getRightIndex());
 			settings.put("e-", bedroomRange.getLeftIndex());
