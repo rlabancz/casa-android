@@ -16,8 +16,6 @@
 
 package com.google.zxing.client.android;
 
-import ca.rldesigns.android.casa.R;
-
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.EncodeHintType;
 import com.google.zxing.MultiFormatWriter;
@@ -43,10 +41,9 @@ final class QRCodeEncoder {
 	private static final int WHITE = 0xFFFFFFFF;
 	private static final int BLACK = 0xFF000000;
 
-	private final Context activity;
+	final Context activity;
 	private String contents;
 	private String displayContents;
-	private String title;
 	private BarcodeFormat format;
 	private final int dimension;
 	private final boolean useVCard;
@@ -67,10 +64,6 @@ final class QRCodeEncoder {
 
 	String getDisplayContents() {
 		return displayContents;
-	}
-
-	String getTitle() {
-		return title;
 	}
 
 	boolean isUseVCard() {
@@ -102,7 +95,6 @@ final class QRCodeEncoder {
 			if (data != null && !data.isEmpty()) {
 				contents = data;
 				displayContents = data;
-				title = activity.getString(R.string.contents_text);
 			}
 		}
 		return contents != null && !contents.isEmpty();
@@ -115,7 +107,6 @@ final class QRCodeEncoder {
 			if (data != null && !data.isEmpty()) {
 				contents = data;
 				displayContents = data;
-				title = activity.getString(R.string.contents_text);
 			}
 			break;
 		}

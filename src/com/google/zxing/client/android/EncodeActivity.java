@@ -61,6 +61,7 @@ public final class EncodeActivity extends Activity {
 	@Override
 	public void onCreate(Bundle icicle) {
 		super.onCreate(icicle);
+		// this.
 		Intent intent = getIntent();
 		if (intent == null) {
 			finish();
@@ -139,7 +140,7 @@ public final class EncodeActivity extends Activity {
 		}
 
 		Intent intent = new Intent(Intent.ACTION_SEND, Uri.parse("mailto:"));
-		intent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.app_name) + " - " + encoder.getTitle());
+		intent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.app_name) + " - Settings");
 		intent.putExtra(Intent.EXTRA_TEXT, contents);
 		intent.putExtra(Intent.EXTRA_STREAM, Uri.parse("file://" + barcodeFile.getAbsolutePath()));
 		intent.setType("image/png");
@@ -189,7 +190,7 @@ public final class EncodeActivity extends Activity {
 			TextView contents = (TextView) findViewById(R.id.contents_text_view);
 			if (intent.getBooleanExtra(Intents.Encode.SHOW_CONTENTS, true)) {
 				contents.setText(qrCodeEncoder.getDisplayContents());
-				setTitle(qrCodeEncoder.getTitle());
+				setTitle("Export to Glass");
 			} else {
 				contents.setText("");
 				setTitle("");
