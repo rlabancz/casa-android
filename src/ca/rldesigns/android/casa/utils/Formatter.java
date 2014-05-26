@@ -6,8 +6,15 @@ import java.util.Locale;
 
 public class Formatter {
 	private static DecimalFormat coordinateFormatter = new DecimalFormat("##.#######");
-	private static DecimalFormat decimalFormatter = new DecimalFormat("'$'#,###");
 	private static NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance(Locale.US);
+	private static DecimalFormat decimalFormatter = new DecimalFormat("'$'#,###");
+	private static DecimalFormat radiusFormatter = new DecimalFormat("## km");
+
+	public static String formatCoordinate(double coord) {
+		String output = "";
+		output = coordinateFormatter.format(coord);
+		return output;
+	}
 
 	public static String formatCurrency(double input) {
 		String output = "";
@@ -21,9 +28,9 @@ public class Formatter {
 		return output;
 	}
 
-	public static String formatCoordinate(double coord) {
+	public static String formatRadius(int input) {
 		String output = "";
-		output = coordinateFormatter.format(coord);
+		output = radiusFormatter.format(input);
 		return output;
 	}
 }

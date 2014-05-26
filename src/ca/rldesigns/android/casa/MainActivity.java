@@ -42,9 +42,11 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.SeekBar;
+import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
 
-public class MainActivity extends Activity implements OnKeyListener, OnRangeBarChangeListener, OnClickListener {
+public class MainActivity extends Activity implements OnKeyListener, OnSeekBarChangeListener, OnRangeBarChangeListener, OnClickListener {
 
 	private SharedPreferences savedSettings;
 
@@ -58,6 +60,11 @@ public class MainActivity extends Activity implements OnKeyListener, OnRangeBarC
 	private int year;
 	private int monthOfYear;
 	private int dayOfMonth;
+
+	// Radius
+	private SeekBar radiusRange;
+	private EditText radiusMax;
+	private int radiusValue;
 
 	// Price
 	private RangeBar priceRange;
@@ -111,40 +118,50 @@ public class MainActivity extends Activity implements OnKeyListener, OnRangeBarC
 
 		datePicker.updateDate(year, monthOfYear, dayOfMonth);
 
+		// Radius
+		radiusRange = (SeekBar) findViewById(R.id.radius_range);
+		radiusRange.setProgress(radiusValue);
+		radiusRange.setOnSeekBarChangeListener(this);
+		radiusMax = (EditText) findViewById(R.id.radius_max);
+		radiusMax.setText(Formatter.formatRadius(radiusRange.getProgress()));
+		radiusMax.setOnKeyListener(this);
+
 		// Price
 		priceRange = (RangeBar) findViewById(R.id.price_range);
 		priceRange.setThumbIndices(priceMinValue, priceMaxValue);
 		priceRange.setOnRangeBarChangeListener(this);
 		priceMin = (EditText) findViewById(R.id.price_min);
-		priceMin.setText(Formatter.formatDecimal(priceRange.getLeftIndex() * 500000));
+		priceMin.setText(Formatter.formatDecimal(priceMinValue * 500000));
 		priceMin.setOnKeyListener(this);
 		priceMax = (EditText) findViewById(R.id.price_max);
-		priceMax.setText(Formatter.formatDecimal(priceRange.getRightIndex() * 500000));
+		priceMax.setText(Formatter.formatDecimal(priceMaxValue * 500000));
 		priceMax.setOnKeyListener(this);
 		// Bedroom
 		bedroomRange = (RangeBar) findViewById(R.id.bedroom_range);
 		bedroomRange.setThumbIndices(bedroomMinValue, bedroomMaxValue);
 		bedroomRange.setOnRangeBarChangeListener(this);
 		bedroomMin = (EditText) findViewById(R.id.bedroom_min);
-		bedroomMin.setText(Integer.toString(bedroomRange.getLeftIndex()));
+		bedroomMin.setText(Integer.toString(bedroomMinValue));
+		bedroomMin.setOnKeyListener(this);
 		bedroomMax = (EditText) findViewById(R.id.bedroom_max);
-		bedroomMax.setText(Integer.toString(bedroomRange.getLeftIndex()));
+		bedroomMax.setText(Integer.toString(bedroomMaxValue));
+		bedroomMax.setOnKeyListener(this);
 		// Bathroom
 		bathroomRange = (RangeBar) findViewById(R.id.bathroom_range);
 		bathroomRange.setThumbIndices(bathroomMinValue, bathroomMaxValue);
 		bathroomRange.setOnRangeBarChangeListener(this);
 		bathroomMin = (EditText) findViewById(R.id.bathroom_min);
-		bathroomMin.setText(Integer.toString(bathroomRange.getLeftIndex()));
+		bathroomMin.setText(Integer.toString(bathroomMinValue));
 		bathroomMax = (EditText) findViewById(R.id.bathroom_max);
-		bathroomMax.setText(Integer.toString(bathroomRange.getLeftIndex()));
+		bathroomMax.setText(Integer.toString(bathroomMaxValue));
 		// Bathroom
 		storiesRange = (RangeBar) findViewById(R.id.stories_range);
 		storiesRange.setThumbIndices(storiesMinValue, storiesMaxValue);
 		storiesRange.setOnRangeBarChangeListener(this);
 		storiesMin = (EditText) findViewById(R.id.stories_min);
-		storiesMin.setText(Integer.toString(storiesRange.getLeftIndex()));
+		storiesMin.setText(Integer.toString(storiesMinValue));
 		storiesMax = (EditText) findViewById(R.id.stories_max);
-		storiesMax.setText(Integer.toString(storiesRange.getLeftIndex()));
+		storiesMax.setText(Integer.toString(storiesMaxValue));
 
 		imageView1 = (ImageView) findViewById(R.id.imageView1);
 		String URL = "http://cdn.realtor.ca/listing/reb82/highres/3/c2855403_5.jpg";
@@ -189,9 +206,7 @@ public class MainActivity extends Activity implements OnKeyListener, OnRangeBarC
 		double lat = savedSettings.getFloat(ApplicationData.SELECTED_LAT, 0.0f);
 		double lng = savedSettings.getFloat(ApplicationData.SELECTED_LNG, 0.0f);
 		selectedLatLng = new LatLng(lat, lng);
-		year = savedSettings.getInt(ApplicationData.START_DATE_YEAR, datePicker.getYear());
-		monthOfYear = savedSettings.getInt(ApplicationData.START_DATE_MONTH, datePicker.getMonth());
-		dayOfMonth = savedSettings.getInt(ApplicationData.START_DATE_DAY, datePicker.getDayOfMonth());
+		radiusValue = savedSettings.getInt(ApplicationData.RADIUS, 0);
 		priceMinValue = savedSettings.getInt(ApplicationData.PRICE_MIN, 0);
 		priceMaxValue = savedSettings.getInt(ApplicationData.PRICE_MAX, 0);
 		bedroomMinValue = savedSettings.getInt(ApplicationData.BEDROOM_MIN, 0);
@@ -200,6 +215,9 @@ public class MainActivity extends Activity implements OnKeyListener, OnRangeBarC
 		bathroomMaxValue = savedSettings.getInt(ApplicationData.BATHROOM_MAX, 0);
 		storiesMinValue = savedSettings.getInt(ApplicationData.STORIES_MIN, 0);
 		storiesMaxValue = savedSettings.getInt(ApplicationData.STORIES_MAX, 0);
+		year = savedSettings.getInt(ApplicationData.START_DATE_YEAR, datePicker.getYear());
+		monthOfYear = savedSettings.getInt(ApplicationData.START_DATE_MONTH, datePicker.getMonth());
+		dayOfMonth = savedSettings.getInt(ApplicationData.START_DATE_DAY, datePicker.getDayOfMonth());
 	}
 
 	private void saveSettings() {
@@ -207,9 +225,7 @@ public class MainActivity extends Activity implements OnKeyListener, OnRangeBarC
 		editor.putFloat(ApplicationData.SELECTED_LAT, Float.parseFloat(Formatter.formatCoordinate(selectedLatLng.latitude)));
 		editor.putFloat(ApplicationData.SELECTED_LNG, Float.parseFloat(Formatter.formatCoordinate(selectedLatLng.longitude)));
 		editor.putString(ApplicationData.SELECTED_ADDRESS, ActionParams.SELECTED_ADDRESS);
-		editor.putInt(ApplicationData.START_DATE_YEAR, datePicker.getYear());
-		editor.putInt(ApplicationData.START_DATE_MONTH, datePicker.getMonth());
-		editor.putInt(ApplicationData.START_DATE_DAY, datePicker.getDayOfMonth());
+		editor.putInt(ApplicationData.RADIUS, radiusRange.getProgress());
 		editor.putInt(ApplicationData.PRICE_MIN, priceRange.getLeftIndex());
 		editor.putInt(ApplicationData.PRICE_MAX, priceRange.getRightIndex());
 		editor.putInt(ApplicationData.BEDROOM_MIN, bedroomRange.getLeftIndex());
@@ -218,6 +234,9 @@ public class MainActivity extends Activity implements OnKeyListener, OnRangeBarC
 		editor.putInt(ApplicationData.BATHROOM_MAX, bathroomRange.getRightIndex());
 		editor.putInt(ApplicationData.STORIES_MIN, storiesRange.getLeftIndex());
 		editor.putInt(ApplicationData.STORIES_MAX, storiesRange.getRightIndex());
+		editor.putInt(ApplicationData.START_DATE_YEAR, datePicker.getYear());
+		editor.putInt(ApplicationData.START_DATE_MONTH, datePicker.getMonth());
+		editor.putInt(ApplicationData.START_DATE_DAY, datePicker.getDayOfMonth());
 		editor.commit();
 	}
 
@@ -226,10 +245,7 @@ public class MainActivity extends Activity implements OnKeyListener, OnRangeBarC
 		try {
 			settings.put("x", Formatter.formatCoordinate(selectedLatLng.longitude));
 			settings.put("y", Formatter.formatCoordinate(selectedLatLng.latitude));
-			settings.put(
-					"d",
-					Integer.toString(datePicker.getMonth()) + "." + Integer.toString(datePicker.getDayOfMonth()) + "."
-							+ Integer.toString(datePicker.getYear()));
+			settings.put("r", radiusRange.getProgress());
 			settings.put("p-", priceRange.getLeftIndex());
 			settings.put("p+", priceRange.getRightIndex());
 			settings.put("e-", bedroomRange.getLeftIndex());
@@ -238,6 +254,10 @@ public class MainActivity extends Activity implements OnKeyListener, OnRangeBarC
 			settings.put("a+", bathroomRange.getRightIndex());
 			settings.put("s-", storiesRange.getLeftIndex());
 			settings.put("s+", storiesRange.getRightIndex());
+			settings.put(
+					"d",
+					Integer.toString(datePicker.getMonth()) + "." + Integer.toString(datePicker.getDayOfMonth()) + "."
+							+ Integer.toString(datePicker.getYear()));
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
@@ -252,6 +272,24 @@ public class MainActivity extends Activity implements OnKeyListener, OnRangeBarC
 
 	private void clearSettings() {
 
+	}
+
+	@Override
+	public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+		switch (seekBar.getId()) {
+		case R.id.radius_range:
+			radiusValue = progress;
+			radiusMax.setText(Formatter.formatRadius(radiusValue));
+			break;
+		}
+	}
+
+	@Override
+	public void onStartTrackingTouch(SeekBar seekBar) {
+	}
+
+	@Override
+	public void onStopTrackingTouch(SeekBar seekBar) {
 	}
 
 	@Override

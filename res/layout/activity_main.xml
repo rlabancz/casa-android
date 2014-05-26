@@ -14,38 +14,95 @@
         android:paddingTop="@dimen/activity_vertical_margin"
         tools:context="ca.rldesigns.android.casa.MainActivity$PlaceholderFragment" >
 
-        <TextView
-            android:id="@+id/location"
+        <RelativeLayout
+            android:id="@+id/location_box"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/app_name" />
+            android:layout_alignParentTop="true" >
 
-        <Button
-            android:id="@+id/set_location"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentTop="true"
-            android:layout_toRightOf="@+id/location"
-            android:text="Set Location" />
+            <TextView
+                android:id="@+id/location"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/app_name"
+                android:textSize="16sp" />
 
-        <ImageView
-            android:id="@+id/imageView1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignLeft="@+id/location"
-            android:layout_below="@+id/location"
-            android:layout_marginTop="43dp"
-            android:contentDescription="@string/default_value"
-            android:visibility="gone" />
+            <Button
+                android:id="@+id/set_location"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:drawableTop="@drawable/ic_action_location_place"
+                android:gravity="center"
+                android:text="@string/set_location"
+                android:textColor="@color/list_item"
+                android:textSize="12sp" />
 
-        <DatePicker
-            android:id="@+id/date_picker"
-            android:layout_width="wrap_content"
+            <ImageView
+                android:id="@+id/imageView1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@+id/location"
+                android:layout_below="@+id/location"
+                android:layout_marginTop="43dp"
+                android:contentDescription="@string/default_value"
+                android:visibility="gone" />
+        </RelativeLayout>
+
+        <!-- price -->
+
+        <RelativeLayout
+            android:id="@+id/radius"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/location"
-            android:layout_marginTop="14dp"
-            android:calendarViewShown="false" />
+            android:layout_below="@+id/location_box"
+            android:layout_marginTop="8dp" >
+
+            <TextView
+                android:id="@+id/radius_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="@string/radius"
+                android:textSize="20sp" />
+
+            <SeekBar
+                android:id="@+id/radius_range"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/radius_title"
+                android:max="10"
+                android:progress="0" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/radius_range"
+                android:baselineAligned="false"
+                android:orientation="horizontal" >
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical" >
+
+                    <TextView
+                        style="@style/RoboTheme"
+                        android:layout_marginTop="0dp"
+                        android:labelFor="@+id/radius_max"
+                        android:text="@string/max" />
+
+                    <EditText
+                        android:id="@+id/radius_max"
+                        style="@style/RoboTheme"
+                        android:layout_marginTop="0dp"
+                        android:inputType="number"
+                        android:text="@string/default_value"
+                        android:textSize="20sp" />
+                </LinearLayout>
+            </LinearLayout>
+        </RelativeLayout>
 
         <!-- price -->
 
@@ -53,7 +110,8 @@
             android:id="@+id/price"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/date_picker" >
+            android:layout_below="@+id/radius"
+            android:layout_marginTop="8dp" >
 
             <TextView
                 android:id="@+id/price_title"
@@ -61,7 +119,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:text="@string/price"
-                android:textSize="22sp" />
+                android:textSize="20sp" />
 
             <com.edmodo.rangebar.RangeBar
                 xmlns:custom="http://schemas.android.com/apk/res-auto"
@@ -69,7 +127,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/price_title"
-                android:layout_marginTop="4dp"
                 custom:tickCount="11" />
 
             <LinearLayout
@@ -97,7 +154,7 @@
                         android:layout_marginTop="0dp"
                         android:inputType="number"
                         android:text="@string/default_value"
-                        android:textSize="18sp" />
+                        android:textSize="20sp" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -118,7 +175,7 @@
                         android:layout_marginTop="0dp"
                         android:inputType="number"
                         android:text="@string/default_value"
-                        android:textSize="18sp" />
+                        android:textSize="20sp" />
                 </LinearLayout>
             </LinearLayout>
         </RelativeLayout>
@@ -129,7 +186,8 @@
             android:id="@+id/bedroom"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/price" >
+            android:layout_below="@+id/price"
+            android:layout_marginTop="8dp" >
 
             <TextView
                 android:id="@+id/bedroom_title"
@@ -137,7 +195,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:text="@string/bedroom"
-                android:textSize="22sp" />
+                android:textSize="20sp" />
 
             <com.edmodo.rangebar.RangeBar
                 xmlns:custom="http://schemas.android.com/apk/res-auto"
@@ -145,7 +203,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/bedroom_title"
-                android:layout_marginTop="4dp"
                 custom:tickCount="5" />
 
             <LinearLayout
@@ -173,7 +230,7 @@
                         android:layout_marginTop="0dp"
                         android:inputType="number"
                         android:text="@string/default_value"
-                        android:textSize="24sp" />
+                        android:textSize="20sp" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -194,7 +251,7 @@
                         android:layout_marginTop="0dp"
                         android:inputType="number"
                         android:text="@string/default_value"
-                        android:textSize="24sp" />
+                        android:textSize="20sp" />
                 </LinearLayout>
             </LinearLayout>
         </RelativeLayout>
@@ -204,7 +261,8 @@
             android:id="@+id/bathroom"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/bedroom" >
+            android:layout_below="@+id/bedroom"
+            android:layout_marginTop="8dp" >
 
             <TextView
                 android:id="@+id/bathroom_title"
@@ -212,7 +270,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:text="@string/bathroom"
-                android:textSize="22sp" />
+                android:textSize="20sp" />
 
             <com.edmodo.rangebar.RangeBar
                 xmlns:custom="http://schemas.android.com/apk/res-auto"
@@ -220,7 +278,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/bathroom_title"
-                android:layout_marginTop="4dp"
                 custom:tickCount="5" />
 
             <LinearLayout
@@ -248,7 +305,7 @@
                         android:layout_marginTop="0dp"
                         android:inputType="number"
                         android:text="@string/default_value"
-                        android:textSize="24sp" />
+                        android:textSize="20sp" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -269,7 +326,7 @@
                         android:layout_marginTop="0dp"
                         android:inputType="number"
                         android:text="@string/default_value"
-                        android:textSize="24sp" />
+                        android:textSize="20sp" />
                 </LinearLayout>
             </LinearLayout>
         </RelativeLayout>
@@ -280,7 +337,8 @@
             android:id="@+id/stories"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/bathroom" >
+            android:layout_below="@+id/bathroom"
+            android:layout_marginTop="8dp" >
 
             <TextView
                 android:id="@+id/stories_title"
@@ -288,7 +346,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:text="@string/stories"
-                android:textSize="22sp" />
+                android:textSize="20sp" />
 
             <com.edmodo.rangebar.RangeBar
                 xmlns:custom="http://schemas.android.com/apk/res-auto"
@@ -296,7 +354,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/stories_title"
-                android:layout_marginTop="4dp"
                 custom:tickCount="4" />
 
             <LinearLayout
@@ -324,7 +381,7 @@
                         android:layout_marginTop="0dp"
                         android:inputType="number"
                         android:text="@string/default_value"
-                        android:textSize="24sp" />
+                        android:textSize="20sp" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -345,10 +402,27 @@
                         android:layout_marginTop="0dp"
                         android:inputType="number"
                         android:text="@string/default_value"
-                        android:textSize="24sp" />
+                        android:textSize="20sp" />
                 </LinearLayout>
             </LinearLayout>
         </RelativeLayout>
+
+        <TextView
+            android:id="@+id/date_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/stories"
+            android:layout_marginTop="8dp"
+            android:gravity="center"
+            android:text="@string/date"
+            android:textSize="20sp" />
+
+        <DatePicker
+            android:id="@+id/date_picker"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/date_title"
+            android:calendarViewShown="false" />
     </RelativeLayout>
 
 </ScrollView>

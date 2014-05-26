@@ -5,13 +5,16 @@
     <string name="hello_world">Hello world!</string>
 
     <!--  -->
+    <string name="set_location">Set Location</string>
     <string name="default_value">0</string>
     <string name="min">Min</string>
     <string name="max">Max</string>
     <!--  -->
     <string name="bedroom">Bedroom</string>
     <string name="bathroom">Bathroom</string>
+    <string name="date">Listing Date</string>
     <string name="price">Price</string>
+    <string name="radius">Search Range</string>
     <string name="stories">Stories</string>
     <!-- menu -->
     <string name="action_export">Export to Glass</string>

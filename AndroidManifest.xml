@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="ca.rldesigns.android.casa"
     android:versionCode="1"
-    android:versionName="1.0-140524" >
+    android:versionName="1.0-140525" >
 
     <uses-sdk
         android:minSdkVersion="17"
