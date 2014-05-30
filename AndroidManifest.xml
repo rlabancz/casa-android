@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="ca.rldesigns.android.casa"
     android:versionCode="1"
-    android:versionName="1.0-140526" >
+    android:versionName="1.0-140529" >
 
     <uses-sdk
         android:minSdkVersion="17"
@@ -45,7 +45,8 @@
 
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
-            android:value="AIzaSyAM4_yvghm3dmTeStjPcI_oKupUEJiK14M" />
+            android:value="AIzaSyBrt8AhbrOxhwzYhiMe3bEvmZ7rPiAUlnM" />
+        <!-- android:value="AIzaSyAM4_yvghm3dmTeStjPcI_oKupUEJiK14M" /> -->
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
